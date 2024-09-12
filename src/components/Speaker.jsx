@@ -34,7 +34,7 @@ export function Speaker() {
     (
     <div className="bg-black pt-12">
     <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white text-center">Speaker at Zep Reserach</h1>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2  sm:px-56  px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2  sm:px-32  px-4">
      {dataList.map((data, index) => (
     <CardContainer key={index} className="inter-var">
       <CardBody
