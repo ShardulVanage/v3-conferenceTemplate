@@ -49,7 +49,7 @@ export default function Gallery() {
   const galleryItems = [...images, ...quotes].sort(() => Math.random() - 0.5)
 
   return (
-    <div className="min-h-screen bg-gradient-to-t from-black to-gray-900 text-white">
+    <div className="min-h-full bg-white py-12 ">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-8">Conference Highlights</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -70,7 +70,7 @@ export default function Gallery() {
             ) : (
               <motion.div
                 key={index}
-                className="bg-gray-800 p-6 rounded-lg shadow-md flex flex-col justify-center"
+                className="bg-gray-100 drop-shadow-md p-6 rounded-lg shadow-md flex flex-col justify-center"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}

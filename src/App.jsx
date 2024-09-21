@@ -8,17 +8,20 @@ import Feature from './components/Feature'
 
 import Stats from './components/Stats'
 import { Topic } from './components/Topic'
-import { Speaker } from './components/Speaker'
+import SpeakersSection from './components/Speaker'
 import { CardPass } from './components/CardPass'
 import { VideFeedBck } from './components/videFeedBck'
 import { Whatis } from './components/Whatis'
 import Gallery from './components/Gallery'
 import Princing from './components/Pricing'
 import TestoCard from './components/TestoCard'
-import { Venue } from './components/Venue'
+
 import { Faq } from './components/Faq'
 import NewsLetter from './components/Newsletter'
 import Footer from './components/Footer'
+import Testimonials from './components/TestoCard'
+import Venue from './components/Venue'
+
 
 
 
@@ -28,20 +31,22 @@ function App() {
   return (
     <>
     <Home/>
-    <Feature/>
     <Stats/>
+    <Feature/>
     <Topic/>
     <VideFeedBck/>
     <Whatis/>
-    <Speaker/>
-    <CardPass/>
+    <SpeakersSection/>
     <Gallery/>
     <Princing/>
-    <TestoCard/>
+    <Testimonials/>
     <Venue/>
     <Faq/>
+    <Footer/> 
+    {/* 
     <NewsLetter/>
-    <Footer/>
+    <CardPass/>
+    */}
     
     </>
   )

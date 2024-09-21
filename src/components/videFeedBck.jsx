@@ -57,21 +57,31 @@ const data = [
 ]
 export function VideFeedBck() {
   return (
-
-    <div className='flex sm:flex-row flex-col items-center justify-center gap-7 sm:gap-16 p-4 py-8  rounded-2xl  bg-white/10   ' >
+<> <section className='bg-gray-50  bg-dot-black/[0.5] relative'>
+ <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div className=" max-w-7xl mx-auto sm:pl-4 z-10 relative ">
+  
+      <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black py-4 text-center">feedback</h2>
+        <p className="text-base md:text-lg text-gray-600 pb-8 text-center " >
+          Discover how our solutions are making an impact worldwide. Our innovative approach connects businesses
+          across continents, leveraging cutting-edge technology to bridge gaps and create opportunities in the global
+          marketplace.
+        </p>
+      </div> 
+    <div className='grid lg:grid-cols-5 grid-cols-2 items-center justify-center  lg:px-80  py-8  rounded-2xl  bg-white/10   ' >
 {data.map((item, index) => (
-
-
-    <Dialog
-    key={index.id}
-      transition={{
-        type: 'spring',
-        bounce: 0.05,
-        duration: 0.25,
+  
+  
+  <Dialog
+  key={index.id}
+  transition={{
+    type: 'spring',
+    bounce: 0.05,
+    duration: 0.25,
     
-    }}
-
-    >
+  }}
+  
+  >
        <div className='flex flex-col items-center justify-center'>
 
       
@@ -79,13 +89,13 @@ export function VideFeedBck() {
         style={{
           borderRadius: '9999px',
         }}
-        className='flex  flex-col overflow-hidden border border-zinc-950/10  drop-shadow-md  dark:border-zinc-50/10 dark:bg-zinc-900 '
-      >
+        className=' overflow-hidden border mt-3 border-zinc-950/10  drop-shadow-md  dark:border-zinc-50/10 dark:bg-zinc-900 '
+        >
         <DialogImage
           src={item.image}
           alt='A desk lamp designed by Edouard Wilfrid Buquet in 1925. It features a double-arm design and is made from nickel-plated brass, aluminium and varnished wood.'
           className='sm:h-32 sm:w-32  h-24 w-24 object-cover '
-        />
+          />
 
       </DialogTrigger>
       <h1 className='mt-2 text-lg font-bold'>{item.title}</h1>
@@ -96,7 +106,7 @@ export function VideFeedBck() {
             borderRadius: '24px',
           }}
           className='pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden border border-zinc-950/10 bg-white dark:border-zinc-50/10 dark:bg-zinc-900 sm:w-[500px]'
-        >
+          >
            <iframe  className='sm:h-[500px] w-auto h-[300px]'
         title='Youtube player'
         sandbox='allow-same-origin allow-forms allow-popups allow-scripts allow-presentation'
@@ -108,7 +118,7 @@ export function VideFeedBck() {
             src='https://images.unsplash.com/photo-1486591978090-58e619d37fe7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
             alt='A desk lamp designed by Edouard Wilfrid Buquet in 1925. It features a double-arm design and is made from nickel-plated brass, aluminium and varnished wood.'
             className='h-full w-full'
-          /> */}
+            /> */}
           <div className='p-6'>
             <DialogTitle className='text-2xl text-zinc-950 font-bold'>
               {item.title}
@@ -123,7 +133,7 @@ export function VideFeedBck() {
                 animate: { opacity: 1, scale: 1, y: 0 },
                 exit: { opacity: 0, scale: 0.8, y: 100 },
               }}
-            >
+              >
               <p className='mt-2 text-zinc-500 dark:text-zinc-500'>
                 {item.description}
             
@@ -140,5 +150,7 @@ export function VideFeedBck() {
 
 ))}
     </div>
+</section>
+</>
   );
 }

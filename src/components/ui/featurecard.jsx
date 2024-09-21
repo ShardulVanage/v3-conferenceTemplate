@@ -1,42 +1,31 @@
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
-
+import { motion } from "framer-motion"
 export function FeatureCard({ category, title, description }) {
   return (
-    
-       <Card className="w-auto max-w-[24rem]">
-      <CardHeader floated={false} shadow={false} className="rounded-none">
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-medium"
-        >
+    <div className="w-auto max-w-[24rem] bg-white shadow-lg rounded-lg overflow-hidden ">
+      <div className="p-6">
+        <p className="text-sm font-medium text-gray-600">
           {category}
-        </Typography>
-        <Typography
-          color="blue-gray"
-          className="mt-1 mb-2 text-[20px] font-bold"
-        >
+        </p>
+        <h2 className="mt-1 mb-2 text-xl font-bold text-gray-900">
           {title}
-        </Typography>
-      </CardHeader>
-      <CardBody className="px-4 pt-0">
-        <Typography className="font-normal text-gray-600">
+        </h2>
+        <p className="text-base font-normal text-gray-600">
           {description}
-        </Typography>
-      </CardBody>
-      <CardFooter className="pt-0 px-4">
-        <Button>read more</Button>
-      </CardFooter>
-    </Card>
-     
-       
+        </p>
+      </div>
+      <div className="px-6 pb-6">
+        <motion.a
+            
+              className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-blue-400 to-purple-500"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md">
+                Read more
+              </span>
+            </motion.a>
+      </div>
+    </div>
   );
 }
 

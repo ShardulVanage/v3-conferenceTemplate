@@ -1,136 +1,139 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
+import { desc } from "framer-motion/client";
 
-const Globe = React.memo(() => {
-  const canvasRef = useRef();
+export default function Globe() {
+  const canvasRef = useRef(null);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [activeLocation, setActiveLocation] = useState(null);
 
-  const initGlobe = useCallback(() => {
-    let phi = 0;
+  const locations = [
+    { name: "San Francisco", coordinates: [37.7749, -122.4194] ,
+      description: "San Francisco is a city in the U.S. state of California. It is the capital and most populous city of the state,",
+    },
+    { name: "Berlin", coordinates: [52.5200, 13.4050] ,
+      description: "Berlin is the capital and most populous city of Germany. It is located in the northeastern part of the country, on the Baltic Sea.",
+    },
+    { name: "Tokyo", coordinates: [35.6762, 139.6503] ,
+      description: "Tokyo is the capital and most populous city of Japan. It is located in the northwestern part of the country, on the Pacific Ocean.",
+    },
+    { name: "Buenos Aires", coordinates: [-34.6037, -58.3816],
+      description: "Buenos Aires is the capital and most populous city of Argentina. It is located in the southwestern part of the country, on the Atlantic Ocean.",
+     },
+  ];
+
+  const locationToAngles = (lat, long) => {
+    return [Math.PI - ((long * Math.PI) / 180 - Math.PI / 2), (lat * Math.PI) / 180];
+  };
+
+  useEffect(() => {
     let width = 0;
-    let height = 0;
-    let globeInstance = null;
+    let currentPhi = 0;
+    let currentTheta = 0;
+    const doublePi = Math.PI * 2;
 
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
+    const onResize = () => canvasRef.current && (width = canvasRef.current.offsetWidth);
+    window.addEventListener('resize', onResize);
+    onResize();
 
-      globeInstance = createGlobe(canvas, {
-        devicePixelRatio: 1,
-        width: width,
-        height: height,
-        scale: 1,
-        phi: 0,
-        theta: 0.3,
-        dark: 0,
-        diffuse: 1.2,
-        mapSamples: 16000,
-        mapBrightness: 6,
-        baseColor: [1, 1, 1],
-        markerColor: [253/255, 223/255, 64/255],
-        glowColor: [0.8, 0.8, 0.8],
-        markers: [
-          { location: [47.4979, 19.0402], size: 0.1 }
-        ],
-        onRender: (state) => {
-          if (!pointerInteracting.current) {
-            phi += 0.005;
-          }
-          state.phi = phi + pointerInteractionMovement.current / 200;
-          state.width = width;
-          state.height = height;
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      width: width * 2,
+      height: width * 2,
+      scale: 0.8,
+      phi: 0,
+      theta: 0.3,
+      dark: 0.9,
+      diffuse: 3,
+      mapSamples: 16000,
+      mapBrightness: 1.2,
+      baseColor: [1, 1, 1],
+      markerColor: [0.3, 0.3, 7],// Blue color
+      glowColor: [1.2, 1.2, 1.2],
+      markers: locations.map(loc => ({ location: loc.coordinates, size: 0.1 })),
+      onRender: (state) => {
+        state.phi = currentPhi;
+        state.theta = currentTheta;
+        const [focusPhi, focusTheta] = activeLocation 
+          ? locationToAngles(...activeLocation.coordinates)
+          : [currentPhi, currentTheta];
+        const distPositive = (focusPhi - currentPhi + doublePi) % doublePi;
+        const distNegative = (currentPhi - focusPhi + doublePi) % doublePi;
+        if (distPositive < distNegative) {
+          currentPhi += distPositive * 0.08;
+        } else {
+          currentPhi -= distNegative * 0.08;
         }
-      });
-      setIsLoading(false);
-    }
+        currentTheta = currentTheta * 0.92 + focusTheta * 0.08;
+        state.width = width * 2;
+        state.height = width * 2;
+      }
+    });
+
+    setTimeout(() => canvasRef.current.style.opacity = '1');
 
     return () => {
-      if (globeInstance) {
-        globeInstance.destroy();
-      }
+      globe.destroy();
+      window.removeEventListener('resize', onResize);
     };
-  }, []);
-
-  useEffect(() => {
-    const destroyGlobe = initGlobe();
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      destroyGlobe();
-      initGlobe();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      destroyGlobe();
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [initGlobe]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const onPointerDown = (e) => {
-      pointerInteracting.current =
-        e.clientX - pointerInteractionMovement.current;
-      canvas.style.cursor = 'grabbing';
-    };
-    const onPointerUp = () => {
-      pointerInteracting.current = null;
-      canvas.style.cursor = 'grab';
-    };
-    const onPointerOut = () => {
-      pointerInteracting.current = null;
-      canvas.style.cursor = 'grab';
-    };
-    const onMouseMove = (e) => {
-      if (pointerInteracting.current !== null) {
-        const delta = e.clientX - pointerInteracting.current;
-        pointerInteractionMovement.current = delta;
-        canvas.style.cursor = 'grabbing';
-      }
-    };
-    const onTouchMove = (e) => {
-      if (pointerInteracting.current !== null && e.touches[0]) {
-        const delta = e.touches[0].clientX - pointerInteracting.current;
-        pointerInteractionMovement.current = delta;
-      }
-    };
-
-    canvas.addEventListener('pointerdown', onPointerDown);
-    canvas.addEventListener('pointerup', onPointerUp);
-    canvas.addEventListener('pointerout', onPointerOut);
-    canvas.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('touchmove', onTouchMove);
-
-    return () => {
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      canvas.removeEventListener('pointerup', onPointerUp);
-      canvas.removeEventListener('pointerout', onPointerOut);
-      canvas.removeEventListener('mousemove', onMouseMove);
-      canvas.removeEventListener('touchmove', onTouchMove);
-    };
-  }, []);
+  }, [activeLocation]);
 
   return (
-   
-        
-          <canvas
-            ref={canvasRef}
-            className="absolute top-1/2 left-1/2  transform -translate-x-2/4 -translate-y-1/2"
-            style={{ width: '100%', height: '100%', cursor: 'grab' }}
-          />
-      
-     
-  );
-});
+    <div className="relative  w-full max-w-[600px] mx-auto py-0 ">
+      <div className="aspect-square">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full opacity-0 transition-opacity duration-1000 ease-in cursor-grab active:cursor-grabbing"
+          style={{ contain: 'layout paint size' }}
+          onPointerDown={(e) => {
+            pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
+            canvasRef.current.style.cursor = 'grabbing';
+          }}
+          onPointerUp={() => {
+            pointerInteracting.current = null;
+            canvasRef.current.style.cursor = 'grab';
+          }}
+          onPointerOut={() => {
+            pointerInteracting.current = null;
+            canvasRef.current.style.cursor = 'grab';
+          }}
+          onMouseMove={(e) => {
+            if (pointerInteracting.current !== null) {
+              const delta = e.clientX - pointerInteracting.current;
+              pointerInteractionMovement.current = delta;
+              canvasRef.current.style.cursor = 'grabbing';
+            }
+          }}
+        />
+      </div>
+      {activeLocation && (
+        <div className="absolute bg-opacity-20 top-24 left-1/2 transform -translate-x-1/2 -translate-y-full mb-4 p-1  shadow-lg rounded-lg  bg-gradient-to-br from-blue-400 to-purple-500">
+          <div className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md">
+            <h2 className="text-lg font-bold mb-2">{activeLocation.name}</h2>
+          <p className="text-sm">{activeLocation.description}</p>
+         
+          </div>
+        </div>
+      )}
 
-export default Globe;
+      <div className="-mt-12 z-20 relative ">
+        <h1 className="text-2xl font-bold text-center">checkout our upcoming conferences</h1>
+      </div>
+      <div className="flex flex-wrap justify-center items-center mt-4 gap-2 ">
+        {locations.map((location) => (
+          <button
+            key={location.name}
+            onClick={() => setActiveLocation(location)}
+            className="px-4 py-2 bg-white text-black border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-colors duration-200"
+          >
+            {location.name}
+          </button>
+        ))}
+      </div>
+      <div>
+        <p className="text-base  text-justify pt-4 text max-w-md mx-auto ">Some Text, innovative ideas on affiliate and ecommerce marketing. After soaking up the knowledge, look out for some extra perks at the end of each day: happy hours, rooftop sunsets, and an irresistible industry nightlife.</p>
+      </div>
+    </div>
+  );
+}

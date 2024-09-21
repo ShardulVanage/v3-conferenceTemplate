@@ -41,38 +41,37 @@ export default function Home() {
     
   return (
     <>
-    <section className="bg-gray-900 ">
+    <section className=" bg-gradient-to-bl from-slate-900 via-purple-900 to-slate-900 animate-gradient-x" >
+      
    <AuroraBackground>
-    <div className='w-screen sm:h-screen flex sm:flex-row justify-between items-center flex-col-reverse'>  
+    <div className='sm:w-full sm:h-screen flex sm:flex-row justify-between items-center flex-col-reverse ' >  
     <div className=' relative z-10 sm:w-1/2 flex flex-col justify-center items-center bg-transparent '>
       <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-2xl lg:pt-8 lg:ml-24 px-2 ">
+
+          <span className="inline-flex justify-center items-center font-mono ">
           <img
-            className="h-16"
-            src={logo}
+            className="h-12 bg-white/10  rounded-xl "
+            src="https://res.cloudinary.com/dwlhesiyi/image/upload/v1726731577/il2wr5yxd2w1sarnj3it.svg"
             alt="Your Company"
-          />
+            />
+          <h1 className="text-white font-semibold pl-2 text-2xl">Zep Research</h1>
+            </span>
           <div className="mt-24 sm:mt-32 lg:mt-12">
-            <a href="#" className="inline-flex space-x-6">
-              <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-100 ring-1 ring-inset ring-indigo-100/20">
-                What's new
-              </span>
-              <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-300 ">
-                <span>Budapest 2025</span>
-                
-              </span>
-            </a>
+            
           </div>
           <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
             Deploy to the cloud with confidence
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-300">
+          <p className="mt-6 text-lg leading-8 text-gray-100">
             Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
             fugiat veniam occaecat fugiat aliqua.  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
             fugiat veniam occaecat fugiat aliqua.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
            
-           <Button variant="gradient" color="yellow" size="lg">Buy Now</Button>
+           <button className="px-8 py-2 bg-blue-500 drop-shadow-lg rounded-md  text-white font-bold transition duration-200 hover:bg-white hover:text-blue-700 border-2 border-transparent hover:border-blue-700">
+            Invert it
+          </button>
       
             <a href="#" className="text-sm font-semibold leading-6 text-white">
               Learn more <span aria-hidden="true">→</span>
@@ -80,7 +79,7 @@ export default function Home() {
           </div>
         </div>
     </div>
-        <div className=' sm:absolute  h-screen w-screen  '  >
+        <div className=' sm:absolute  h-screen sm:h-full w-full'  >
         <Card/>
         </div>
       </div>
